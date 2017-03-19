@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>パノラマギャラリー</title>
+        <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+    </head>
+    <body>
+        <a-asset>
+            <a-mixin id="link" geometry="primitive: plane; width: 1.0; height: 2.0"></a-mixin>
+            <a-mixin id="link-hovered" geometry="primitive: plane; width: 1.5; height: 3.0"></a-mixin>
+            <a-mixin id="link-selected" geometry="primitive: plane; width: 1.5; height: 3.0" sound="src: ./sounds/SpeechDisambiguation.wav"></a-mixin>
+            <a-mixin id="cursor" cursor="fuse: true; fuseTimeout: 500" geometry="primitive: ring; radiusOuter: 0.05; radiusInner: 0.03; segmentsTheta: 45" material="color: gray; shader: flat;"></a-mixin>
+            <a-mixin id="cursor-hovering" material="color: red"></a-mixin>
+            <a-mixin id="click-animation" begin="click" easing="ease-in" attribute="scale"fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-mixin>
+            <a-mixin id="fuse-animation" begin="fusing" easing="ease-in" attribute="scale" fill="forwards" from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-mixin>
+        </a-asset>
+
+        <a-scene>
+            <!-- Controls -->
+            <a-camera position="0 0 0" wasd-controls-enabled="false">
+                <a-entity camera look-controls>
+                    <a-entity mixin="cursor" position="0 0 0">
+                        <a-animation mixin="click-animation"></a-animation>
+                        <a-animation mixin="fuse-animation"></a-animation>
+                    </a-entity>
+                </a-entity>
+            </a-camera>
+
+            <!-- Pano -->
+            <a-entity id="holder" geometry="primitive: sphere; radius: 10;" material="shader: flat" scale="1 1 -1" rotation="0 90 0"></a-entity>
+
+            <!-- Links to panos -->
+            <a-entity id="links" position="-3 -1 0"></a-entity>
+        </a-scene>
+
+        <script>
+(function () {
+    var panos = [
+        {
+            'title': 'page1',
+            'thumb': 'images/page1.png',
+            'url': 'images/sphere.jpg',
+            'width': 2, 'height': 2, 'depth': 0.1,
+        },
+        {
+            'title': 'page2',
+            'thumb': 'images/page2.png',
+            'url': 'images/sphere.jpg',
+            'width': 2, 'height': 2, 'depth': 0.1,
+        },
+        {
+            'title': 'page3',
+            'thumb': 'images/page3.png',
+            'url': 'images/sphere.jpg',
+            'width': 2, 'height': 2, 'depth': 0.1,
+        },
+        {
+            'title': 'page4',
+            'thumb': 'images/page4.png',
+            'url': 'images/sphere.jpg',
+            'width': 2, 'height': 2, 'depth': 0.1,
+        },
+        {
+            'title': 'page5',
+            'thumb': 'images/page5.png',
+            'url': 'images/sphere.jpg',
+            'width': 2, 'height': 2, 'depth': 0.1,
+        }
+    ];
+
+    var links = document.querySelector('#links');
+    var scene = document.querySelector('a-scene');
+    var holder = document.querySelector('#holder');
+    var selectedLinkEl;
+
+    // Create a link for each item in panos[]
+    panos.forEach(function (pano, idx, arr) {
+        // Arrange the links horizontally without any overlaps
+        var length = arr.length;
+        var distance = 5.0;
+        var xPos = distance * Math.cos(Math.PI * ((idx + 1)/length)) + 3;
+        var yPos = 1;
+        var zPos = -1 * distance * Math.sin(Math.PI * ((idx + 1)/length));
+
+        var yRot = ((idx + 1)/length) * 180.0 - 90;
+        var el = document.createElement('a-entity');
+        el.dataset.id = idx;
+        el.setAttribute('position', '' + xPos + ' ' + yPos + ' ' + zPos);
+        el.setAttribute('rotation', '0 ' + yRot + ' 0');
+        el.setAttribute('mixin', 'link');
+        el.setAttribute('material', {src: 'url(' + pano.thumb + ')'});
+        el.setAttribute('geometry', {
+            primitive: 'box',
+            width: Number(pano.width),
+            height: Number(pano.height),
+            depth: Number(pano.depth),
+        });
+
+        panos[idx].el = el;
+
+        // When a link is clicked, change the displayed pano by changing the
+        // material attribute of the holder element
+        el.addEventListener('click', handleClick);
+
+        // Add the link to the links element
+        links.appendChild(el);
+    });
+
+    if (scene.hasLoaded) {
+        selectPano(2);
+    } else {
+        scene.addEventListener('loaded', function () { selectPano (2); });
+    }
+
+    function handleClick (evt) {
+        var index = evt.currentTarget.dataset.id;
+        selectPano(index);
+    }
+
+    function selectPano(index) {
+        var pano = panos[index];
+        var linkEL = pano.el;
+        if (selectedLinkEl === pano.el) {
+            return;
+        }
+        if (selectedLinkEl) {
+            selectedLinkEl.removeState('selected');
+        }
+        holder.setAttribute('material', {
+            shader: 'flat',
+            src: 'url(' + pano.url  + ')'
+        });
+        selectedLinkEl = linkEL;
+        selectedLinkEl.addState('selected');
+    }
+})();
+        </script>
+    </body>
+</html>
