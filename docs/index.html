@@ -8,7 +8,6 @@
     <body>
         <a-scene>
             <a-asset>
-                <a-mixin id="pict" geometry="primitive: plane; width: 1.0; height: 2.0"></a-mixin>
                 <a-mixin id="link-hovered" geometry="primitive: plane; width: 1.5; height: 3.0"></a-mixin>
                 <a-mixin id="link-selected" geometry="primitive: plane; width: 1.5; height: 3.0" sound="src: ./sounds/SpeechDisambiguation.wav"></a-mixin>
                 <a-mixin id="cursor" cursor="fuse: true; fuseTimeout: 500" geometry="primitive: ring; radiusOuter: 0.05; radiusInner: 0.03; segmentsTheta: 45" material="color: gray; shader: flat;"></a-mixin>
@@ -33,7 +32,7 @@
             <a-plane width="10" height="10" material="color:gray; shader: standard;" position="-5 5 0" rotation="0 90 0"></a-plane>
             <a-plane width="10" height="10" material="color:gray; shader: standard;" position="0 5 5" rotation="0 -180 0"></a-plane>
             <a-plane width="10" height="10" material="color:gray; shader: standard;" position="0 5 -5" rotation="0 0 0"></a-plane>
-            <a-entity id="pictures" mixin="pict" position="0 0 0"></a-entity>
+            <a-entity id="pictures" position="0 0 0"></a-entity>
             <a-entity light="type: ambient; color: #B00"></a-entity>
         </a-scene>
 
