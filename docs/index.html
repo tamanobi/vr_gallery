@@ -15,7 +15,6 @@
                 <a-mixin id="cursor-hovering" material="color: red"></a-mixin>
                 <a-mixin id="click-animation" begin="click" easing="ease-in" attribute="scale"fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-mixin>
                 <a-mixin id="fuse-animation" begin="fusing" easing="ease-in" attribute="scale" fill="forwards" from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-mixin>
-                <a-mixin id="room" geometry="primitive: box; width:50.0; height: 50.0; depth: 50.0;" position="25 0 25" material="color: blue; shader: flat;"></a-mixin>
             </a-asset>
 
             <!-- Controls -->
@@ -35,7 +34,6 @@
             <a-plane width="10" height="10" material="color:gray; shader: flat;" position="-10 5 0" rotation="0 90 0"></a-plane>
             <a-plane width="10" height="10" material="color:gray; shader: flat;" position="0 5 10" rotation="0 -90 0"></a-plane>
             <a-plane width="10" height="10" material="color:gray; shader: flat;" position="0 5 -10" rotation="0 180 0"></a-plane>
-            <a-entity mixin="room"></a-entity>
             <a-entity id="pictures" mixin="pict" position="0 0 0"></a-entity>
         </a-scene>
 
